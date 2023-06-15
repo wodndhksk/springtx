@@ -40,8 +40,9 @@ public class TxBasicTest {
     }
 
     @Slf4j
+    @Transactional
     static class BasicService {
-        @Transactional
+
         public void tx() {
             log.info("call tx");
             boolean txActive = TransactionSynchronizationManager.isActualTransactionActive();
