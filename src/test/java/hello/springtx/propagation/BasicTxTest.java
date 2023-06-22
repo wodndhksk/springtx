@@ -74,4 +74,21 @@ public class BasicTxTest {
         txManager.rollback(tx2);
     }
 
+    @Test
+    void inner_commit() {
+        log.info("외부 트랜잭션 시작");
+        TransactionStatus outer = txManager.getTransaction(new DefaultTransactionAttribute());
+        log.info("outer.isNewTransaction()={}", outer.isNewTransaction());
+
+        log.info("내부 트랜잭션 시작");
+        TransactionStatus inner = txManager.getTransaction(new DefaultTransactionAttribute());
+        log.info("inner.isNewTransaction()={}", inner.isNewTransaction());
+        log.info("내부 트랜잭션 커밋");
+        txManager.commit(inner); // 내부 트랜잭션에서 commit 실행이 되지 않음(외부 트랜잭션에 참여했으므로)
+
+        log.info("외부 트랜잭션 커밋");
+        txManager.commit(outer); // 실제 커밋이 일어나는 단계 (외부 트랜잭션 커밋)
+    }
+
+
 }
